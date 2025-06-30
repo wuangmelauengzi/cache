@@ -1,0 +1,2110 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:w="urn:schemas-microsoft-com:office:word"
+    xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta http-equiv=Content-Type content="text/html; charset=utf-8">
+    <style type="text/css">
+        table  
+        {  
+            border-collapse: collapse;
+            border: none;  
+            width: 100%;  
+        }  
+        td,tr  
+        {  
+            border: solid #CCC 1px;
+            padding:3px;
+            font-size:9pt;
+        } 
+        .codestyle{
+            word-break: break-all;
+            mso-highlight:rgb(252, 252, 252);
+            padding-left: 5px; background-color: rgb(252, 252, 252); border: 1px solid rgb(225, 225, 232);
+        }
+        img {
+            width:100;
+        }
+    </style>
+    <meta name=ProgId content=Word.Document>
+    <meta name=Generator content="Microsoft Word 11">
+    <meta name=Originator content="Microsoft Word 11">
+    <xml><w:WordDocument><w:View>Print</w:View></xml></head>
+    <body><h1>协议说明</h1><div style="margin-left:20px;"><p>[TOC]</p>
+<h5>简要描述</h5>
+<ul>
+<li>
+<p>协议说明：设备和平台采用MQTT协议实现交互</p>
+</li>
+<li>
+<p>发布主题：
+1.设备devId为标识发布消息，消息包含：设备状态或者命令等
+发布主题例如： /transpeed/lane/${ulId}/upload
+其中transpeed为品牌、lane为场景、ulId为设备id、upload为行为</p>
+</li>
+<li>订阅主题：
+1.订阅设备devId的主题后，可以收到对应主题发布的消息
+订阅主题例如： /transpeed/lane/${ulId}/download
+其中transpeed为品牌、lane为场景、ulId为设备id、download为行为</li>
+</ul>
+<h5>请求参数</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">cmd</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">命令  功能对应值</td>
+</tr>
+<tr>
+<td style="text-align: left;">msgId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">消息id</td>
+</tr>
+<tr>
+<td style="text-align: left;">ulId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">设备id</td>
+</tr>
+<tr>
+<td style="text-align: left;">devIp</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">设备ip地址</td>
+</tr>
+<tr>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">时间戳</td>
+</tr>
+<tr>
+<td style="text-align: left;">content</td>
+<td style="text-align: left;">JSON</td>
+<td style="text-align: left;">业务对象</td>
+</tr>
+</tbody>
+</table>
+<h5>请求示例</h5>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askIn&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;ulId&quot;: &quot;0011as254da&quot;,
+     &quot;devIp&quot;: &quot;192.168.22.78&quot;,
+     &quot;timestamp&quot;:  1750041649960,
+     &quot;content&quot;: {
+           &quot;barrierGate&quot;:&quot;down&quot;,
+           &quot;barrierLight&quot;:&quot;yellow&quot;,
+           &quot;barrierScreen&quot;:&quot;前方异常&quot;,
+           &quot;barrierVoice&quot;:&quot;前方异常&quot;,
+           &quot;barrierRailing&quot;:&quot;rotate&quot;,
+           &quot;remark&quot;:&quot;remark&quot;
+     }
+  }</code></pre></table>
+<h5>应答参数</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">cmd</td>
+<td style="text-align: left;">string</td>
+<td>回复命令  主题+'Response' 如askInResponse</td>
+</tr>
+<tr>
+<td style="text-align: left;">msgId</td>
+<td style="text-align: left;">string</td>
+<td>消息id  与请求时的消息 ID 一致，用 于标识该应答对应哪一个请求</td>
+</tr>
+<tr>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;">string</td>
+<td>应答对应的时间戳</td>
+</tr>
+<tr>
+<td style="text-align: left;">code</td>
+<td style="text-align: left;">string</td>
+<td>0表示成功，其它则表示出错</td>
+</tr>
+<tr>
+<td style="text-align: left;">msg</td>
+<td style="text-align: left;">string</td>
+<td>成功</td>
+</tr>
+<tr>
+<td style="text-align: left;">data</td>
+<td style="text-align: left;">JSON</td>
+<td>业务对象</td>
+</tr>
+</tbody>
+</table>
+<h5>应答示例</h5>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askInResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;yes&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: &quot;试验车允许通行1试验车允许通行2&quot;,
+        &quot;led&quot;: {
+            &quot;color&quot;: &quot;BLUE&quot;,
+            &quot;line1&quot;: &quot;试验车允许通行1&quot;,
+            &quot;format1&quot;: &quot;1&quot;,
+            &quot;line2&quot;: &quot;试验车允许通行2&quot;,
+            &quot;format2&quot;: &quot;1&quot;,
+            &quot;line3&quot;: &quot;试验车允许通行3&quot;,
+            &quot;format3&quot;: &quot;1&quot;,
+            &quot;line4&quot;: &quot;试验车允许通行4&quot;,
+            &quot;format4&quot;: &quot;1&quot;
+        },
+        &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table></div><h1>2、上行</h1><div style="margin-left:0px;"><h2>2.1、入场请求</h2><div style="margin-left:0px;"><h3>1. 入场请求</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>askIn</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">guId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">交易GUID，唯一性标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">ulId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">车道号</td>
+</tr>
+<tr>
+<td style="text-align: left;">plate</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">车牌号</td>
+</tr>
+<tr>
+<td style="text-align: left;">faceId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">人脸id</td>
+</tr>
+<tr>
+<td style="text-align: left;">voucherType</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">凭证类型</td>
+</tr>
+<tr>
+<td style="text-align: left;">voucher</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">凭证消息</td>
+</tr>
+<tr>
+<td style="text-align: left;">triggerTime</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">触发时间</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+  &quot;cmd&quot;: &quot;askIn&quot;,
+  &quot;msgId&quot;: &quot;123456789&quot;,
+  &quot;devId&quot;: &quot;device001&quot;,
+  &quot;timestamp&quot;: 1750041649960,
+  &quot;content&quot;: {
+    &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+    &quot;ulId&quot;: &quot;1&quot;,
+    &quot;plate&quot;: &quot;整牌拒识&quot;,
+    &quot;faceId&quot;: &quot;1&quot;,
+    &quot;voucher&quot;: &quot;480;100001;0;;;50;;0;&quot;,
+    &quot;voucherType&quot;: &quot;OBU号&quot;,
+    &quot;triggerTime&quot;: &quot;2024-03-22 15:09:30&quot;
+  }
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askInResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;yes&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: &quot;试验车允许通行1试验车允许通行2&quot;,
+        &quot;led&quot;: {
+            &quot;color&quot;: &quot;BLUE&quot;,
+            &quot;line1&quot;: &quot;试验车允许通行1&quot;,
+            &quot;format1&quot;: &quot;1&quot;,
+            &quot;line2&quot;: &quot;试验车允许通行2&quot;,
+            &quot;format2&quot;: &quot;1&quot;,
+            &quot;line3&quot;: &quot;试验车允许通行3&quot;,
+            &quot;format3&quot;: &quot;1&quot;,
+            &quot;line4&quot;: &quot;试验车允许通行4&quot;,
+            &quot;format4&quot;: &quot;1&quot;
+        },
+        &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askInResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;no&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: &quot;试验车允许通行1试验车允许通行2&quot;,
+        &quot;led&quot;: {
+            &quot;color&quot;: &quot;red&quot;,
+            &quot;line1&quot;: &quot;订单时效校验失败1&quot;,
+            &quot;format1&quot;: &quot;1&quot;,
+            &quot;line2&quot;: &quot;订单时效校验失败2&quot;,
+            &quot;format2&quot;: &quot;1&quot;,
+            &quot;line3&quot;: &quot;订单时效校验失败3&quot;,
+            &quot;format3&quot;: &quot;1&quot;,
+            &quot;line4&quot;: &quot;订单时效校验失败4&quot;,
+            &quot;format4&quot;: &quot;1&quot;
+        },
+        &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>失败应答示例</h5>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askInResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;-1&quot;,
+     &quot;msg&quot;: &quot;请求参数异常&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;no&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>json</td>
+<td>LED提示信息</td>
+</tr>
+<tr>
+<td>--color</td>
+<td>string</td>
+<td>字体颜色（当前我这边配置三种   RED、BLUE、GREEN）</td>
+</tr>
+<tr>
+<td>--line1</td>
+<td>string</td>
+<td>第一行显示内容</td>
+</tr>
+<tr>
+<td>--format1</td>
+<td>string</td>
+<td>第一行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>--line2</td>
+<td>string</td>
+<td>第二行显示内容</td>
+</tr>
+<tr>
+<td>--format2</td>
+<td>string</td>
+<td>第二行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>--line3</td>
+<td>string</td>
+<td>第三行显示内容</td>
+</tr>
+<tr>
+<td>--format3</td>
+<td>string</td>
+<td>第三行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>--line4</td>
+<td>string</td>
+<td>第四行显示内容</td>
+</tr>
+<tr>
+<td>--format4</td>
+<td>string</td>
+<td>第四行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.2、出场请求</h2><div style="margin-left:0px;"><h3>2. 出场请求</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>askOut</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">guId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">交易GUID，唯一性标识</td>
+</tr>
+<tr>
+<td style="text-align: left;">ulId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">车道号</td>
+</tr>
+<tr>
+<td style="text-align: left;">plate</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">车牌号</td>
+</tr>
+<tr>
+<td style="text-align: left;">faceId</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">人脸id</td>
+</tr>
+<tr>
+<td style="text-align: left;">voucherType</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">凭证类型</td>
+</tr>
+<tr>
+<td style="text-align: left;">voucher</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">凭证消息</td>
+</tr>
+<tr>
+<td style="text-align: left;">triggerTime</td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">触发时间</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+  &quot;cmd&quot;: &quot;askOut&quot;,
+  &quot;msgId&quot;: &quot;123456789&quot;,
+  &quot;devId&quot;: &quot;device001&quot;,
+  &quot;timestamp&quot;: 1750041649960,
+  &quot;content&quot;: {
+    &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+    &quot;ulId&quot;: &quot;1&quot;,
+    &quot;plate&quot;: &quot;整牌拒识&quot;,
+    &quot;faceId&quot;: &quot;1&quot;,
+    &quot;voucher&quot;: &quot;480;100001;0;;;50;;0;&quot;,
+    &quot;voucherType&quot;: &quot;OBU号&quot;,
+    &quot;triggerTime&quot;: &quot;2024-03-22 15:09:30&quot;
+  }
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askOutResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;yes&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: &quot;试验车允许通行1试验车允许通行2&quot;,
+        &quot;led&quot;: {
+            &quot;color&quot;: &quot;BLUE&quot;,
+            &quot;line1&quot;: &quot;试验车允许通行1&quot;,
+            &quot;format1&quot;: &quot;1&quot;,
+            &quot;line2&quot;: &quot;试验车允许通行2&quot;,
+            &quot;format2&quot;: &quot;1&quot;,
+            &quot;line3&quot;: &quot;试验车允许通行3&quot;,
+            &quot;format3&quot;: &quot;1&quot;,
+            &quot;line4&quot;: &quot;试验车允许通行4&quot;,
+            &quot;format4&quot;: &quot;1&quot;
+        },
+        &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askInResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;no&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: &quot;试验车允许通行1试验车允许通行2&quot;,
+        &quot;led&quot;: {
+            &quot;color&quot;: &quot;red&quot;,
+            &quot;line1&quot;: &quot;订单时效校验失败1&quot;,
+            &quot;format1&quot;: &quot;1&quot;,
+            &quot;line2&quot;: &quot;订单时效校验失败2&quot;,
+            &quot;format2&quot;: &quot;1&quot;,
+            &quot;line3&quot;: &quot;订单时效校验失败3&quot;,
+            &quot;format3&quot;: &quot;1&quot;,
+            &quot;line4&quot;: &quot;订单时效校验失败4&quot;,
+            &quot;format4&quot;: &quot;1&quot;
+        },
+        &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>失败应答示例</h5>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askInResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;-1&quot;,
+     &quot;msg&quot;: &quot;请求参数异常&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;no&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>json</td>
+<td>LED提示信息</td>
+</tr>
+<tr>
+<td>--color</td>
+<td>string</td>
+<td>字体颜色（当前我这边配置三种   RED、BLUE、GREEN）</td>
+</tr>
+<tr>
+<td>--line1</td>
+<td>string</td>
+<td>第一行显示内容</td>
+</tr>
+<tr>
+<td>--format1</td>
+<td>string</td>
+<td>第一行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>--line2</td>
+<td>string</td>
+<td>第二行显示内容</td>
+</tr>
+<tr>
+<td>--format2</td>
+<td>string</td>
+<td>第二行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>--line3</td>
+<td>string</td>
+<td>第三行显示内容</td>
+</tr>
+<tr>
+<td>--format3</td>
+<td>string</td>
+<td>第三行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>--line4</td>
+<td>string</td>
+<td>第四行显示内容</td>
+</tr>
+<tr>
+<td>--format4</td>
+<td>string</td>
+<td>第四行展示方式（1：固定  5：滚动）</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.3、入场记录上传</h2><div style="margin-left:0px;"><h3>1. 入场记录上传</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>uploadInRecord</code></li>
+</ul>
+<h4>content参数</h4>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>交易GUID，唯一性标识</td>
+</tr>
+<tr>
+<td>uiId</td>
+<td>string</td>
+<td>车道号</td>
+</tr>
+<tr>
+<td>plate</td>
+<td>string</td>
+<td>车牌号</td>
+</tr>
+<tr>
+<td>amendCN</td>
+<td>string</td>
+<td>修正CN?</td>
+</tr>
+<tr>
+<td>voucher</td>
+<td>string</td>
+<td>凭证信息</td>
+</tr>
+<tr>
+<td>voucherType</td>
+<td>string</td>
+<td>凭证类型</td>
+</tr>
+<tr>
+<td>triggerTime</td>
+<td>string</td>
+<td>触发时间</td>
+</tr>
+<tr>
+<td>processTime</td>
+<td>string</td>
+<td>处理时间</td>
+</tr>
+<tr>
+<td>operatorId</td>
+<td>string</td>
+<td>操作员ID</td>
+</tr>
+<tr>
+<td>faceId</td>
+<td>string</td>
+<td>人脸ID</td>
+</tr>
+<tr>
+<td>captureName</td>
+<td>string</td>
+<td>捕获名</td>
+</tr>
+<tr>
+<td>vehicleType</td>
+<td>string</td>
+<td>车型</td>
+</tr>
+<tr>
+<td>outType</td>
+<td>string</td>
+<td>出口类型</td>
+</tr>
+<tr>
+<td>isBookCar</td>
+<td>string</td>
+<td>是否为预定车</td>
+</tr>
+<tr>
+<td>isTmpCar</td>
+<td>string</td>
+<td>是否为临时车</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段？</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>string</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>letGoCode</td>
+<td>string</td>
+<td>允许通行码</td>
+</tr>
+<tr>
+<td>axle</td>
+<td>string</td>
+<td>轴数？</td>
+</tr>
+<tr>
+<td>axleImage</td>
+<td>string</td>
+<td>车轴图</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;guId&quot;: &quot;CC524ABC-EC5A-4E22-951E-5A095EAC0CE5&quot;,
+    &quot;ulId&quot;: &quot;1&quot;,
+    &quot;plate&quot;: &quot;整牌拒识&quot;,
+    &quot;voucher&quot;: &quot;480;100001;0; ;;;;0;&quot;,
+    &quot;voucherType&quot;: &quot;OBU号&quot;,
+    &quot;operatorId&quot;: &quot;0&quot;,
+    &quot;amendCN&quot;: &quot;整牌拒识&quot;,
+    &quot;triggerTime&quot;: &quot;2024-03-22 15:09:18&quot;,
+    &quot;processTime&quot;: &quot;4&quot;,
+    &quot;captureName&quot;: &quot;1031A202403151509182.jpg&quot;,
+    &quot;vehicleType&quot;: &quot;黑名单&quot;,
+    &quot;isBookCar&quot;: &quot;no&quot;,
+    &quot;letGoCode&quot;: &quot;自动&quot;,
+    &quot;isTmpCar&quot;: &quot;yes&quot;,
+    &quot;outType&quot;: &quot;未出场&quot;,
+    &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+    &quot;remark&quot;: &quot;null&quot;,
+    &quot;etcInfo&quot;: null,
+    &quot;axle&quot;: &quot;2&quot;,
+    &quot;axleImage&quot;: &quot;1031A202403151509182_veh.jpg&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;uploadInRecordResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: null,
+        &quot;guId&quot;: null,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>失败应答示例</h5>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;uploadInRecordResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;-1&quot;,
+     &quot;msg&quot;: &quot;请求参数异常&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;no&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.4、出场记录上传</h2><div style="margin-left:0px;"><h3>1. 出场记录上传</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>uploadOutRecord</code></li>
+</ul>
+<h4>content参数</h4>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>交易GUID，唯一性标识</td>
+</tr>
+<tr>
+<td>uiId</td>
+<td>string</td>
+<td>车道号</td>
+</tr>
+<tr>
+<td>plate</td>
+<td>string</td>
+<td>车牌号</td>
+</tr>
+<tr>
+<td>amendCN</td>
+<td>string</td>
+<td>修正CN?</td>
+</tr>
+<tr>
+<td>voucher</td>
+<td>string</td>
+<td>凭证信息</td>
+</tr>
+<tr>
+<td>voucherType</td>
+<td>string</td>
+<td>凭证类型</td>
+</tr>
+<tr>
+<td>triggerTime</td>
+<td>string</td>
+<td>触发时间</td>
+</tr>
+<tr>
+<td>processTime</td>
+<td>string</td>
+<td>处理时间</td>
+</tr>
+<tr>
+<td>operatorId</td>
+<td>string</td>
+<td>操作员ID</td>
+</tr>
+<tr>
+<td>faceId</td>
+<td>string</td>
+<td>人脸ID</td>
+</tr>
+<tr>
+<td>captureName</td>
+<td>string</td>
+<td>捕获名</td>
+</tr>
+<tr>
+<td>vehicleType</td>
+<td>string</td>
+<td>车型</td>
+</tr>
+<tr>
+<td>outType</td>
+<td>string</td>
+<td>出口类型</td>
+</tr>
+<tr>
+<td>isBookCar</td>
+<td>string</td>
+<td>是否为预定车</td>
+</tr>
+<tr>
+<td>isTmpCar</td>
+<td>string</td>
+<td>是否为临时车</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段？</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>string</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>letGoCode</td>
+<td>string</td>
+<td>允许通行码</td>
+</tr>
+<tr>
+<td>axle</td>
+<td>string</td>
+<td>轴数？</td>
+</tr>
+<tr>
+<td>axleImage</td>
+<td>string</td>
+<td>车轴图</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;guId&quot;: &quot;CC524ABC-EC5A-4E22-951E-5A095EAC0CE5&quot;,
+    &quot;ulId&quot;: &quot;1&quot;,
+    &quot;plate&quot;: &quot;整牌拒识&quot;,
+    &quot;voucher&quot;: &quot;480;100001;0; ;;;;0;&quot;,
+    &quot;voucherType&quot;: &quot;OBU号&quot;,
+    &quot;operatorId&quot;: &quot;0&quot;,
+    &quot;amendCN&quot;: &quot;整牌拒识&quot;,
+    &quot;triggerTime&quot;: &quot;2024-03-22 15:09:18&quot;,
+    &quot;processTime&quot;: &quot;4&quot;,
+    &quot;captureName&quot;: &quot;1031A202403151509182.jpg&quot;,
+    &quot;vehicleType&quot;: &quot;黑名单&quot;,
+    &quot;isBookCar&quot;: &quot;no&quot;,
+    &quot;letGoCode&quot;: &quot;自动&quot;,
+    &quot;isTmpCar&quot;: &quot;yes&quot;,
+    &quot;outType&quot;: &quot;未出场&quot;,
+    &quot;reserv&quot;: &quot;eyJWZWhpY2xlVHlwZSI6IjEiLCJTdGljcmVyIjoiSDI0NTEiLCJMaWNlbmNlbm8iOiIwIiwiT3JkZXJJZCI6IkREMjAyNDAyMjUwMDIifQ==&quot;,
+    &quot;remark&quot;: &quot;null&quot;,
+    &quot;etcInfo&quot;: null,
+    &quot;axle&quot;: &quot;2&quot;,
+    &quot;axleImage&quot;: &quot;1031A202403151509182_veh.jpg&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;uploadOutRecordResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: null,
+        &quot;guId&quot;: null,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>失败应答示例</h5>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;uploadOutRecordResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;-1&quot;,
+     &quot;msg&quot;: &quot;请求参数异常&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: &quot;no&quot;,
+        &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.5、校时请求</h2><div style="margin-left:0px;"><h3>1. 校时请求</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>syncTime</code></li>
+</ul>
+<h4>content参数</h4>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>车道号</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;ulId&quot;: &quot;1&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;syncTimeResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: null,
+        &quot;guId&quot;: null,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.6、闲时LED请求</h2><div style="margin-left:0px;"><h3>1. 闲时LED请求</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>getLedIdleMessage</code>
+<h4>content参数</h4>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>车道号</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+&quot;ulId&quot;: &quot;1&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+ &quot;cmd&quot;: &quot;getLedIdleMessageResponse&quot;,
+ &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+ &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+ &quot;code&quot;: &quot;0&quot;,
+ &quot;msg&quot;: &quot;成功&quot;,
+ &quot;data&quot;: {
+    &quot;allowPass&quot;: null,
+    &quot;guId&quot;: null,
+    &quot;voice&quot;: &quot;闲时展示1闲时展示2&quot;,
+    &quot;led&quot;: {
+        &quot;color&quot;: &quot;BLUE&quot;,
+        &quot;line1&quot;: &quot;闲时展示1&quot;,
+        &quot;format1&quot;: &quot;1&quot;,
+        &quot;line2&quot;: &quot;闲时展示2&quot;,
+        &quot;format2&quot;: &quot;1&quot;,
+        &quot;line3&quot;: &quot;闲时展示3&quot;,
+        &quot;format3&quot;: &quot;1&quot;,
+        &quot;line4&quot;: &quot;闲时展示4&quot;,
+        &quot;format4&quot;: &quot;1&quot;
+    },
+    &quot;reserv&quot;: null,
+    &quot;time&quot;: null
+ }
+}</code></pre></table>
+<h5>失败应答示例</h5>
+<table width='100%' class='codestyle'><pre><code>{
+ &quot;cmd&quot;: &quot;getLedIdleMessageResponse&quot;,
+ &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+ &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+ &quot;code&quot;: &quot;-1&quot;,
+ &quot;msg&quot;: &quot;请求参数异常&quot;,
+ &quot;data&quot;: {
+    &quot;allowPass&quot;: null,
+    &quot;guId&quot;: &quot;BF6BC5DC-0666-46D3-B172-47B8F9DA7AE4&quot;,
+    &quot;voice&quot;: null,
+    &quot;led&quot;: null,
+    &quot;reserv&quot;: null,
+    &quot;time&quot;: null
+ }
+}</code></pre></table></li>
+</ul></div><h2>2.7、请求白名单</h2><div style="margin-left:0px;"><h3>1. 请求白名单</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>askWhiteListData</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>车道号</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;ulId&quot;: &quot;1&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;askWhiteListDataResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;wlUrl&quot;: &quot;/Users/hanshuai/WorkSpace/盐城中汽二期/Transpeed-Lane/DL2014081000/white.db&quot;,
+        &quot;fileName&quot;: &quot;white.db&quot;,
+        &quot;wlVersion&quot;: &quot;1712045389213&quot;,
+        &quot;wlSize&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wlUrl</td>
+<td>string</td>
+<td>本地白名单路径</td>
+</tr>
+<tr>
+<td>fileName</td>
+<td>string</td>
+<td>文件名</td>
+</tr>
+<tr>
+<td>wlVersion</td>
+<td>string</td>
+<td>版本号</td>
+</tr>
+<tr>
+<td>WlSize</td>
+<td>string</td>
+<td>大小</td>
+</tr>
+</tbody>
+</table></div><h2>2.8、地磅信息上传</h2><div style="margin-left:0px;"><h3>1. 地磅信息上传</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>uploadObuWeight</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ulId</td>
+<td>String</td>
+<td>设备id</td>
+</tr>
+<tr>
+<td>obuId</td>
+<td>String</td>
+<td>obu号</td>
+</tr>
+<tr>
+<td>cardId</td>
+<td>String</td>
+<td>卡号</td>
+</tr>
+<tr>
+<td>nWorkId</td>
+<td>String</td>
+<td>工号</td>
+</tr>
+<tr>
+<td>chDrvName</td>
+<td>string</td>
+<td>驾驶员名称</td>
+</tr>
+<tr>
+<td>overRun</td>
+<td>String</td>
+<td>超限标志，0否，1是</td>
+</tr>
+<tr>
+<td>speed</td>
+<td>String</td>
+<td>车速km/h</td>
+</tr>
+<tr>
+<td>acceleration</td>
+<td>String</td>
+<td>加速度</td>
+</tr>
+<tr>
+<td>nAxis</td>
+<td>String</td>
+<td>轴数</td>
+</tr>
+<tr>
+<td>nAxisGroup</td>
+<td>String</td>
+<td>轴组数</td>
+</tr>
+<tr>
+<td>nAxisTotalWg</td>
+<td>String</td>
+<td>总重kg</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>object</td>
+<td>weight1-weightN,int,各轴重量kg</td>
+</tr>
+<tr>
+<td>type</td>
+<td>object</td>
+<td>type1-typeN,int,各轴轴型1：单轴单轮；2：单轴双轮；3：双联轴单轮；4：双联轴单双轮；  5：双联轴双轮；6：三联轴单轮；7：三联轴双轮</td>
+</tr>
+<tr>
+<td>distance</td>
+<td>object</td>
+<td>distance1-distanceN,number,各轴轴间距m</td>
+</tr>
+<tr>
+<td>image</td>
+<td>string</td>
+<td>base64格式图片</td>
+</tr>
+<tr>
+<td>offline</td>
+<td>String</td>
+<td>（0是在线上传，1是离线上传）</td>
+</tr>
+<tr>
+<td>wgType</td>
+<td>string</td>
+<td>（0动态称重 1静态称重）</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+  &quot;ulId&quot;: &quot;3333&quot;,
+  &quot;obuId&quot;: &quot;3333&quot;,
+  &quot;cardId&quot;: &quot;144&quot;,
+  &quot;nWorkId&quot;: &quot;44&quot;,
+  &quot;chDrvName&quot;: &quot;张三&quot;,
+  &quot;overRun&quot;: &quot;0&quot;,
+  &quot;speed&quot;: &quot;30.0&quot;,
+  &quot;acceleration&quot;: &quot;12&quot;,
+  &quot;nAxis&quot;: &quot;3&quot;,
+  &quot;nAxisGroup&quot;: &quot;3&quot;,
+  &quot;nAxisTotalWg&quot;: &quot;3000&quot;,
+  &quot;weight&quot;:{
+    &quot;weight1&quot;: &quot;1000&quot;,
+    &quot;weight2&quot;: &quot;1000&quot;,
+    &quot;weight3&quot;: &quot;1000&quot;
+  },
+  &quot;type&quot;:{
+    &quot;type1&quot;: &quot;2&quot;,
+    &quot;type2&quot;: &quot;2&quot;,
+    &quot;type3&quot;: &quot;2&quot;
+  },
+  &quot;distance&quot;:{
+    &quot;distance1&quot;: &quot;1.50&quot;,
+    &quot;distance2&quot;: &quot;1.50&quot;
+  },
+  &quot;offline&quot;: &quot;0&quot;,
+  &quot;wgType&quot;: &quot;0&quot;,
+  &quot;image&quot;: &quot;123321&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;uploadObuWeightResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+        &quot;allowPass&quot;: null,
+        &quot;guId&quot;: null,
+        &quot;voice&quot;: null,
+        &quot;led&quot;: null,
+        &quot;reserv&quot;: null,
+        &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.9、轮轴信息上传</h2><div style="margin-left:0px;"><h3>1. 轮轴信息上传</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>uploadAxle</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>GUID</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>车道号</td>
+</tr>
+<tr>
+<td>axle</td>
+<td>string</td>
+<td>轮轴数</td>
+</tr>
+<tr>
+<td>axleImage</td>
+<td>string</td>
+<td>轮轴图片名称</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;guId&quot;: &quot;E42D535E-74DD-4C4A-93DB-C9E2C563493B&quot;,
+    &quot;ulId&quot;: &quot;7&quot;,
+    &quot;axle&quot;:&quot;1&quot;,
+    &quot;axleImage&quot;:&quot;8888.jpg&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;uploadAxleResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+            &quot;idleLedStr&quot;: null,
+            &quot;direction&quot;: null,
+            &quot;allowPass&quot;: null,
+            &quot;guId&quot;: null,
+            &quot;voice&quot;: null,
+            &quot;led&quot;: null,
+            &quot;reserv&quot;: null,
+            &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.10、根据OBU查询车贴信息</h2><div style="margin-left:0px;"><h3>1. 根据OBU查询车贴信息</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>getStickerByObu</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>obu</td>
+<td>string</td>
+<td>obu号</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>设备id</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;obu&quot;: &quot;123456&quot;,
+    &quot;ulId&quot;: &quot;123&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;getStickerByObuResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: {
+            &quot;sticker&quot;: &quot;H2451&quot;,
+            &quot;idleLedStr&quot;: null,
+            &quot;direction&quot;: null,
+            &quot;allowPass&quot;: null,
+            &quot;guId&quot;: null,
+            &quot;voice&quot;: null,
+            &quot;led&quot;: null,
+            &quot;reserv&quot;: null,
+            &quot;time&quot;: null
+     }
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>sticker</td>
+<td>string</td>
+<td>车贴号</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.11、车道设备状态上报</h2><div style="margin-left:0px;"><h3>1. 车道设备状态上报</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>uploadDeviceStatus</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ip</td>
+<td>string</td>
+<td>设备IP</td>
+</tr>
+<tr>
+<td>deviceType</td>
+<td>string</td>
+<td>设备类型：0:相机 1:天线 2:地磅 3:全景相机 4:LED</td>
+</tr>
+<tr>
+<td>deviceStatus</td>
+<td>string</td>
+<td>设备状态： 0:在线 1:离线</td>
+</tr>
+<tr>
+<td>uploadTime</td>
+<td>string</td>
+<td>上报时间</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>设备id</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;ip&quot;: &quot;127.0.0.1&quot;,
+    &quot;deviceType&quot;: &quot;0&quot;,
+    &quot;deviceStatus&quot;: &quot;0&quot;,
+    &quot;uploadTime&quot;: &quot;2001-01-01 12:25:32&quot;,
+    &quot;ulId&quot;: &quot;123&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;getStickerByObuResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: null
+  }</code></pre></table></div><h2>2.12、图片上报</h2><div style="margin-left:0px;"><h3>1. 图片上报</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>uploadImage</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>设备id</td>
+</tr>
+<tr>
+<td>fileName</td>
+<td>string</td>
+<td>图片名称</td>
+</tr>
+<tr>
+<td>plate</td>
+<td>string</td>
+<td>车牌号</td>
+</tr>
+<tr>
+<td>base64Str</td>
+<td>string</td>
+<td>图片base64</td>
+</tr>
+<tr>
+<td>triggerTime</td>
+<td>string</td>
+<td>触发时间</td>
+</tr>
+<tr>
+<td>inOutFlag</td>
+<td>string</td>
+<td>进出标识，0进，1出</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;ulId&quot;: &quot;127.0.0.1&quot;,
+    &quot;fileName&quot;: &quot;0&quot;,
+    &quot;plate&quot;: &quot;0&quot;,
+    &quot;base64Str&quot;: &quot;2001-01-01 12:25:32&quot;,
+    &quot;triggerTime&quot;: &quot;2001-01-01 12:25:32&quot;,
+    &quot;inOutFlag&quot;: &quot;0&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;getStickerByObuResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: null
+  }</code></pre></table></div><h2>2.13、道闸控制器心跳</h2><div style="margin-left:0px;"><h3>1. 道闸控制器心跳</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>deviceHeart</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>leverType</td>
+<td>string</td>
+<td>数据类型,如道闸模式</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>设备id</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;leverType&quot;: &quot;123456&quot;,
+    &quot;ulId&quot;: &quot;123&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;getStickerByObuResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: null
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>sticker</td>
+<td>string</td>
+<td>车贴号</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div><h2>2.14、道闸信号</h2><div style="margin-left:0px;"><h3>1. 道闸信号</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/upload</code></li>
+<li><strong>命令</strong>：<code>ioStatus</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lever</td>
+<td>string</td>
+<td>总信号</td>
+</tr>
+<tr>
+<td>zo</td>
+<td>string</td>
+<td>线圈1</td>
+</tr>
+<tr>
+<td>zz</td>
+<td>string</td>
+<td>闸机防闸</td>
+</tr>
+<tr>
+<td>zt</td>
+<td>string</td>
+<td>线圈2</td>
+</tr>
+<tr>
+<td>zj</td>
+<td>string</td>
+<td>天线</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>设备id</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;lever&quot;: &quot;123456&quot;,
+    &quot;zo&quot;: &quot;123456&quot;,
+    &quot;zz&quot;: &quot;123456&quot;,
+    &quot;zt&quot;: &quot;123456&quot;,
+    &quot;zj&quot;: &quot;123456&quot;,
+    &quot;ulId&quot;: &quot;123&quot;
+}</code></pre></table>
+<h4>成功返回示例</h4>
+<table width='100%' class='codestyle'><pre><code>  {
+     &quot;cmd&quot;: &quot;getStickerByObuResponse&quot;,
+     &quot;msgId&quot;: &quot;1562566753001402b681&quot;,
+     &quot;timestamp&quot;:  &quot;1750042058712&quot;,
+     &quot;code&quot;: &quot;0&quot;,
+     &quot;msg&quot;: &quot;成功&quot;,
+     &quot;data&quot;: null
+  }</code></pre></table>
+<h5>返回参数说明</h5>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg</td>
+<td>string</td>
+<td>提示消息</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>状态码（0：成功  -1：失败）</td>
+</tr>
+<tr>
+<td>sticker</td>
+<td>string</td>
+<td>车贴号</td>
+</tr>
+<tr>
+<td>allowPass</td>
+<td>string</td>
+<td>是否允许通行</td>
+</tr>
+<tr>
+<td>guId</td>
+<td>string</td>
+<td>流水号</td>
+</tr>
+<tr>
+<td>voice</td>
+<td>string</td>
+<td>声音</td>
+</tr>
+<tr>
+<td>led</td>
+<td>string</td>
+<td>LED信息</td>
+</tr>
+<tr>
+<td>reserv</td>
+<td>string</td>
+<td>保留字段</td>
+</tr>
+<tr>
+<td>time</td>
+<td>string</td>
+<td>当前时间</td>
+</tr>
+</tbody>
+</table></div></div><h1>3、下行</h1><div style="margin-left:0px;"><h2>3.1、道闸栏杆控制</h2><div style="margin-left:0px;"><h3>1. 道闸栏杆控制</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/download</code></li>
+<li><strong>命令</strong>：<code>controlGate</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>operatorId</td>
+<td>string</td>
+<td>操作员</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>道闸ID</td>
+</tr>
+<tr>
+<td>tlc</td>
+<td>string</td>
+<td>0-抬杆，1-落杆，2-常开，3-正常，4-常闭，5-重启</td>
+</tr>
+<tr>
+<td>zoneId</td>
+<td>string</td>
+<td>区域ID</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;operatorId&quot;: &quot;853&quot;,
+    &quot;ulId&quot;: &quot;0&quot;,
+    &quot;tlc&quot;: &quot;0&quot;,
+    &quot;zoneId&quot;: &quot;853&quot;
+}</code></pre></table></div><h2>3.2、区域容量更新</h2><div style="margin-left:0px;"><h3>1. 区域容量更新</h3>
+<ul>
+<li><strong>发布主题</strong>：<code>/transpeed/lane/${ulId}/download</code></li>
+<li><strong>命令</strong>：<code>maxVehicleNumber</code>
+<h4>content参数</h4></li>
+</ul>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>count</td>
+<td>string</td>
+<td>通行车辆数</td>
+</tr>
+<tr>
+<td>dir</td>
+<td>string</td>
+<td>通行方向，0进1出</td>
+</tr>
+<tr>
+<td>zoneId</td>
+<td>string</td>
+<td>区域ID</td>
+</tr>
+<tr>
+<td>ulId</td>
+<td>string</td>
+<td>设备id</td>
+</tr>
+</tbody>
+</table>
+<h4>请求示例</h4>
+<table width='100%' class='codestyle'><pre><code>{
+    &quot;count&quot;: &quot;853&quot;,
+    &quot;dir&quot;: &quot;0&quot;,
+    &quot;zoneId&quot;: &quot;853&quot;,
+    &quot;ulId&quot;: &quot;853&quot;
+}</code></pre></table></div></div></body></html>
